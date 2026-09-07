@@ -12,14 +12,11 @@ ALIGN.update(json.load(open(os.path.join(_here, "onsets3.json"))))
 ALIGN.update(json.load(open(os.path.join(_here, "onsets4.json"))))
 ALIGN.update(json.load(open(os.path.join(_here, "onsets5.json"))))
 
-clips_s = [enc(f"~/Desktop/phrases/p{i}.mp3") for i in range(7)]
-clips_l = [enc(f"~/Desktop/lyrics_seg/{c}.mp3") for c in "ABCDEFG"]
-clips_q = [enc(f"~/Desktop/p2/q{i}.mp3") for i in range(8)]
-clips_r = [enc(f"~/Desktop/runA/a{i}.mp3") for i in range(1,8)]
-clips_m = [enc(f"~/Desktop/lyr2/m{i}.mp3") for i in range(2,8)]
-_vid = os.path.join(_here, "vid")
-clips_v = [enc(f"{_vid}/v{i}.mp3") for i in range(1,8)]
-clips_w = [enc(f"{_vid}/w1.mp3")]
+_AUD0 = os.path.join(os.path.dirname(_here), "audio")
+def _load(k, n): return [enc(f"{_AUD0}/{k}{i}.mp3") for i in range(n)]
+clips_s=_load("S",7); clips_l=_load("L",7); clips_q=_load("Q",8)
+clips_r=_load("R",7); clips_m=_load("M",6)
+clips_v=_load("V",7); clips_w=_load("W",1)
 
 HTML = r'''<title>彌陀聖號簡譜教唱</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -931,15 +928,10 @@ setPart(0);
 '''
 
 # 各套音檔的原始路徑 (供網站版複製成獨立檔案)
-SRC = {
-  "S": [os.path.expanduser(f"~/Desktop/phrases/p{i}.mp3") for i in range(7)],
-  "L": [os.path.expanduser(f"~/Desktop/lyrics_seg/{c}.mp3") for c in "ABCDEFG"],
-  "Q": [os.path.expanduser(f"~/Desktop/p2/q{i}.mp3") for i in range(8)],
-  "R": [os.path.expanduser(f"~/Desktop/runA/a{i}.mp3") for i in range(1,8)],
-  "M": [os.path.expanduser(f"~/Desktop/lyr2/m{i}.mp3") for i in range(2,8)],
-  "V": [f"{_vid}/v{i}.mp3" for i in range(1,8)],
-  "W": [f"{_vid}/w1.mp3"],
-}
+# 音檔以倉庫自己的 audio/ 為準 (桌面上的中間檔已清理)
+_AUD = os.path.join(os.path.dirname(_here), "audio")
+COUNT = {"S":7, "L":7, "Q":8, "R":7, "M":6, "V":7, "W":1}
+SRC = {k: [f"{_AUD}/{k}{i}.mp3" for i in range(n)] for k, n in COUNT.items()}
 B64 = {"S":clips_s,"L":clips_l,"Q":clips_q,"R":clips_r,"M":clips_m,"V":clips_v,"W":clips_w}
 ORDER = ["S","L","Q","R","M","V","W"]
 
@@ -988,5 +980,8 @@ open(f"{site}/.nojekyll","w").close()
 n=0
 for k in ORDER:
     for i,src in enumerate(SRC[k]):
-        shutil.copy(src, f"{site}/audio/{k}{i}.mp3"); n+=1
+        dst = f"{site}/audio/{k}{i}.mp3"
+        if os.path.abspath(src) != os.path.abspath(dst):   # 來源已在 audio/ 時不自我複製
+            shutil.copy(src, dst)
+        n+=1
 print("網站版:", site, "index.html %.1f KB" % (os.path.getsize(f"{site}/index.html")/1024), f"+ {n} 個音檔")
