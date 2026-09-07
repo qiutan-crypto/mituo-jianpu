@@ -362,6 +362,7 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;c
     </select>
   </div>
   <label class="toggle"><input type="checkbox" id="accomp" checked>原音配琴音</label>
+  <label class="toggle"><input type="checkbox" id="gap" checked>循環留空跟唱</label>
   <label class="toggle"><input type="checkbox" id="muyu" checked>木魚拍子</label>
   <label class="toggle"><input type="checkbox" id="drone" checked>持續音</label>
   <div class="spacer"></div>
@@ -383,7 +384,7 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;c
 </div>
 
 <h2 class="sect">逐句練習<span id="partNote" style="font-family:'Noto Sans TC';font-size:12.5px;font-weight:400;color:var(--gold);letter-spacing:.04em;margin-left:12px"></span></h2>
-<p class="sect-note">「琴音」聽準音高，「唱名原音」「加字原音」是老師兩遍教唱的原聲——開著上方的「原音配琴音」時，琴音會跟著原音的實際節奏一起響，當伴奏用；關掉就是純原聲。「教唱循環」唱一遍留一遍空給你跟唱。</p>
+<p class="sect-note">「琴音」聽準音高，「唱名原音」「加字原音」是老師兩遍教唱的原聲——開著上方的「原音配琴音」時，琴音會跟著原音的實際節奏一起響，當伴奏用；關掉就是純原聲。選定音源後按「循環」，就循環那個內容：唱一遍，再留一遍<b>等長</b>的空給你跟唱，木魚在留空期間照常打拍，下一遍正落在拍點上。只想連續聽、不想等的話，把上方「循環留空跟唱」關掉即可。</p>
 <div class="phrases" id="phrases"></div>
 
 <details class="notes-sect">
@@ -539,7 +540,7 @@ const PC = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
 
 const $ = s => document.querySelector(s);
 const tempoEl=$("#tempo"), tempoV=$("#tempoV"), keyEl=$("#key");
-const muyuEl=$("#muyu"), droneEl=$("#drone"), accompEl=$("#accomp");
+const muyuEl=$("#muyu"), droneEl=$("#drone"), accompEl=$("#accomp"), gapEl=$("#gap");
 const nowDigit=$("#nowDigit"), nowName=$("#nowName"), nowSub=$("#nowSub"), nowState=$("#nowState");
 const beatsEl=$("#beats");
 
@@ -740,17 +741,22 @@ async function loopArmed(pi, btn){
     const dur = (idx<0) ? schedulePhrase(pi, t0, my)
                         : scheduleClipAt(pi, og, al, buf, t0, my);
     nowState.textContent="範唱 · "+label;
-    later(()=>{ if(token===my){ nowState.textContent="請跟唱 · "+label; highlight(null); } },
-          (t0-ctx.currentTime+dur)*1000);
-    if(idx<0){
-      if(muyuEl.checked){
-        const bd=beatDur(), nb=Math.round(phraseBeats(p)/0.5);
-        for(let b=0;b<nb;b++){ if(PART.id==="p1" && b%2) continue; muyu(t0+dur+b*0.5*bd); }
-      }
-    }else{
-      gapMuyu(pi, al, t0+dur+0.1);
+    if(gapEl.checked){
+      later(()=>{ if(token===my){ nowState.textContent="請跟唱 · "+label; highlight(null); } },
+            (t0-ctx.currentTime+dur)*1000);
     }
-    later(round, (t0-ctx.currentTime+dur*2+0.45)*1000);
+    if(gapEl.checked){
+      if(idx<0){
+        if(muyuEl.checked){
+          const bd=beatDur(), nb=Math.round(phraseBeats(p)/0.5);
+          for(let b=0;b<nb;b++){ if(PART.id==="p1" && b%2) continue; muyu(t0+dur+b*0.5*bd); }
+        }
+      }else{
+        gapMuyu(pi, al, t0+dur);
+      }
+    }
+    /* 週期正好是兩倍句長: 留空與唱的部分等長, 木魚一路不斷, 下一遍正落在拍點上 */
+    later(round, (t0-ctx.currentTime+dur*(gapEl.checked?2:1))*1000);
   };
   round();
 }
