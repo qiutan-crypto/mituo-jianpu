@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111828">
+<meta name="description" content="彌陀聖號簡譜逐句教唱：唱名與加字原音、琴音同步伴奏、跟唱留空與木魚拍子。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#127900;</text></svg>">
+<title>彌陀聖號簡譜教唱</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EDEAE0; --surface:#F7F5EE; --raise:#FFFDF7;
+  --ink:#1A2340; --ink-soft:#3B4566; --muted:#6A7291;
+  --gold:#8A6820; --gold-dim:#A98C4E; --vermilion:#B23A24;
+  --line:#CFC9B8; --line-soft:#E2DDD0;
+  --shadow:0 1px 2px rgba(26,35,64,.07), 0 8px 24px rgba(26,35,64,.05);
+}
+:root:not([data-theme="light"]){ }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111828; --surface:#182137; --raise:#1F2A45;
+    --ink:#E9E4D6; --ink-soft:#C4C0B2; --muted:#8C95B0;
+    --gold:#D2AC58; --gold-dim:#A98C4E; --vermilion:#DC6146;
+    --line:#2C3855; --line-soft:#222E49;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111828; --surface:#182137; --raise:#1F2A45;
+  --ink:#E9E4D6; --ink-soft:#C4C0B2; --muted:#8C95B0;
+  --gold:#D2AC58; --gold-dim:#A98C4E; --vermilion:#DC6146;
+  --line:#2C3855; --line-soft:#222E49;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Noto Sans TC","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px 72px}
+
+/* ---------- 页头 ---------- */
+header{padding:44px 0 26px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin:0 0 14px
+}
+h1{
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:clamp(30px,5.4vw,44px);line-height:1.2;margin:0 0 12px;
+  letter-spacing:.04em;text-wrap:balance
+}
+.lede{max-width:60ch;color:var(--ink-soft);margin:0 0 18px}
+.lede b{color:var(--ink);font-weight:500}
+.source{
+  display:flex;flex-wrap:wrap;gap:6px 20px;
+  font-size:12.5px;color:var(--muted);
+  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums
+}
+.source span::before{content:"·";margin-right:8px;color:var(--gold-dim)}
+.source span:first-child::before{content:none}
+
+/* ---------- 控制台 ---------- */
+.console{
+  position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb, var(--ground) 92%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  margin:0 -20px;padding:12px 20px
+}
+.console-in{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.ctl{display:flex;align-items:center;gap:9px}
+.ctl label{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.val{font-family:"IBM Plex Mono",monospace;font-size:13px;font-variant-numeric:tabular-nums;color:var(--gold);min-width:52px}
+input[type=range]{width:104px;accent-color:var(--gold)}
+select{
+  font-family:"IBM Plex Mono",monospace;font-size:13px;
+  background:var(--raise);color:var(--ink);
+  border:1px solid var(--line);border-radius:3px;padding:4px 7px
+}
+.toggle{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:13px;color:var(--ink-soft);user-select:none
+}
+.toggle input{accent-color:var(--gold);width:15px;height:15px}
+.spacer{flex:1}
+button{
+  font-family:inherit;font-size:13.5px;cursor:pointer;
+  background:var(--raise);color:var(--ink);
+  border:1px solid var(--line);border-radius:3px;
+  padding:7px 15px;transition:border-color .15s, color .15s, background .15s;
+  touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  min-height:36px
+}
+button:active{background:color-mix(in srgb, var(--gold) 16%, var(--raise))}
+/* 選中的音源 */
+button[aria-checked="true"]{
+  border-color:var(--gold); color:var(--gold);
+  background:color-mix(in srgb, var(--gold) 12%, transparent); font-weight:500
+}
+button:hover{border-color:var(--gold);color:var(--gold)}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+button.primary{background:var(--ink);color:var(--ground);border-color:var(--ink);font-weight:500}
+button.primary:hover{background:var(--gold);border-color:var(--gold);color:var(--ground)}
+button[aria-pressed="true"]{border-color:var(--vermilion);color:var(--vermilion)}
+
+/* ---------- 当前音大字显示 ---------- */
+.now{
+  display:grid;grid-template-columns:auto 1fr auto;gap:0 28px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--vermilion);
+  padding:20px 24px;margin:26px 0 34px
+}
+.now-digit{
+  font-family:"IBM Plex Mono",monospace;font-weight:600;
+  font-size:62px;line-height:.9;color:var(--vermilion);
+  font-variant-numeric:tabular-nums;position:relative;padding:0 4px
+}
+.now-digit .dot{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--vermilion)
+}
+.now-digit .dot.up{top:-11px}
+.now-digit .dot.down{bottom:-11px}
+.now-meta{min-width:0}
+.now-name{
+  font-family:"Noto Serif TC",serif;font-size:27px;font-weight:600;
+  letter-spacing:.05em;margin:0 0 3px;color:var(--ink)
+}
+.now-sub{font-size:13px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.now-state{text-align:right;font-size:12.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.now-state strong{display:block;font-size:17px;color:var(--gold);letter-spacing:.04em;text-transform:none;font-weight:500;margin-top:3px}
+.beats{display:flex;gap:5px;justify-content:flex-end;margin-top:9px}
+.beat{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .08s}
+.beat.on{background:var(--vermilion)}
+
+/* ---------- 乐句 ---------- */
+h2.sect{
+  font-family:"Noto Serif TC",serif;font-size:17px;font-weight:600;
+  letter-spacing:.1em;margin:0 0 4px;color:var(--ink)
+}
+.sect-note{font-size:13px;color:var(--muted);margin:0 0 6px}
+.phrases{border-top:1px solid var(--line)}
+.phrase{
+  display:grid;grid-template-columns:58px 1fr;gap:0 18px;
+  padding:20px 0;border-bottom:1px solid var(--line-soft);
+  align-items:start
+}
+.phrase.active{background:color-mix(in srgb, var(--gold) 7%, transparent)}
+.pno{
+  font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:500;
+  color:var(--gold);font-variant-numeric:tabular-nums;
+  display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding-top:2px
+}
+.ptag{
+  font-family:"Noto Sans TC",sans-serif;font-size:10.5px;letter-spacing:.08em;
+  color:var(--vermilion);line-height:1.3;font-weight:500
+}
+.pbody{min-width:0}
+.notes{display:flex;gap:2px 4px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;
+  scrollbar-width:thin}
+.cell{
+  display:flex;flex-direction:column;align-items:center;
+  min-width:44px;padding:6px 4px 5px;border-radius:2px;
+  transition:background .1s
+}
+.cell.on{background:color-mix(in srgb, var(--vermilion) 15%, transparent)}
+.glyph{
+  font-family:"IBM Plex Mono",monospace;font-size:29px;font-weight:500;
+  line-height:1.1;color:var(--ink);position:relative;
+  font-variant-numeric:tabular-nums;display:inline-block;padding:0 2px
+}
+.cell.on .glyph{color:var(--vermilion)}
+.glyph .dot{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:currentColor
+}
+.glyph .dot.up{top:-6px}
+.glyph .dot.down{bottom:-6px}
+.dash{
+  font-family:"IBM Plex Mono",monospace;font-size:29px;font-weight:400;
+  line-height:1.1;color:var(--muted);align-self:center;padding:6px 0 5px
+}
+.solfa{
+  font-size:11px;letter-spacing:.09em;color:var(--muted);
+  margin-top:5px;font-family:"IBM Plex Mono",monospace
+}
+.cell.on .solfa{color:var(--vermilion)}
+.syl{
+  display:none;font-family:"Noto Serif TC",serif;font-size:17px;
+  color:var(--ink);margin-top:3px;line-height:1.2
+}
+.syl.tie{color:var(--gold-dim);font-size:15px}
+.cell.on .syl{color:var(--vermilion)}
+body[data-mode="lyric"] .solfa{display:none}
+body[data-mode="lyric"] .syl{display:block}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:6px 14px;background:transparent}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--ground);font-weight:500}
+.seg button[aria-pressed="true"]:hover{background:var(--gold);color:var(--ground)}
+.nolyric{
+  font-size:11.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;
+  border:1px dashed var(--line);border-radius:3px;padding:5px 11px
+}
+.srcrow{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:9px}
+.srcrow button{padding:7px 13px;font-size:12.5px}
+.prow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.prow button{padding:7px 14px;font-size:12.5px}
+.loopBtn[aria-pressed="true"]{
+  border-color:var(--vermilion); color:var(--ground);
+  background:var(--vermilion); font-weight:500
+}
+.pinfo{font-size:12px;color:var(--muted);font-family:"IBM Plex Mono",monospace;margin-left:auto}
+
+/* ---------- 说明 ---------- */
+.notes-sect{margin-top:40px;padding-top:22px;border-top:1px solid var(--line)}
+.notes-sect summary{
+  cursor:pointer;font-family:"Noto Serif TC",serif;font-size:15px;font-weight:600;
+  letter-spacing:.06em;color:var(--gold);padding:6px 0;list-style-position:outside
+}
+.notes-sect summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.notes-sect[open] summary{margin-bottom:14px}
+.notes-sect h3{
+  font-family:"Noto Serif TC",serif;font-size:15px;font-weight:600;
+  letter-spacing:.08em;margin:0 0 12px
+}
+.notes-sect p{font-size:13.5px;color:var(--ink-soft);max-width:64ch;margin:0 0 12px}
+.tbl{width:100%;overflow-x:auto}
+table{border-collapse:collapse;font-size:13px;min-width:460px}
+th,td{text-align:left;padding:7px 16px 7px 0;border-bottom:1px solid var(--line-soft)}
+th{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--gold)}
+.next{
+  background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--gold);padding:16px 20px;margin-top:22px
+}
+.next h3{margin-top:0}
+.next ul{margin:0;padding-left:20px;font-size:13.5px;color:var(--ink-soft)}
+.next li{margin-bottom:5px}
+/* 播放時才出現的懸浮停止鈕 (手機上尤其需要) */
+#fab{
+  position:fixed;right:16px;bottom:16px;z-index:60;
+  display:none;align-items:center;gap:7px;
+  background:var(--vermilion);color:#fff;border:0;border-radius:26px;
+  padding:14px 22px;font-size:15px;font-weight:500;
+  box-shadow:0 4px 18px rgba(0,0,0,.28);min-height:52px
+}
+#fab.on{display:inline-flex}
+#fab:hover{background:var(--vermilion);color:#fff}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- 手機 ---------- */
+@media (max-width:700px){
+  body{font-size:16px}
+  .wrap{padding:0 14px 96px}
+  header{padding:28px 0 20px}
+  /* 控制台在手機上不吸頂: 控制項多, 吸頂會吃掉半個屏幕 */
+  .console{position:static;margin:0 -14px;padding:12px 14px}
+  .console-in{gap:12px 16px}
+  .ctl label{font-size:11px}
+  input[type=range]{width:120px}
+  select, .toggle{font-size:14px}
+  .toggle input{width:18px;height:18px}
+  .console button{flex:1;min-width:110px}
+  .seg button{padding:9px 14px;font-size:14px}
+  .srcrow button, .prow button{font-size:13.5px;padding:9px 14px;min-height:42px}
+  .glyph{font-size:26px}
+  .dash{font-size:26px}
+  .cell{min-width:38px}
+  .now{padding:16px 16px}
+  .now-digit{font-size:52px}
+  .now-name{font-size:23px}
+  table{font-size:12.5px}
+}
+@media (max-width:560px){
+  .phrase{grid-template-columns:1fr;gap:8px}
+  .pno{flex-direction:row;align-items:baseline;gap:10px}
+  .now{grid-template-columns:auto 1fr;gap:0 18px}
+  .now-state{grid-column:1/-1;text-align:left;margin-top:12px}
+  .beats{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+
+<button id="fab">■ 停止</button>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">譯經院講經 · 簡譜教唱</p>
+  <h1>彌陀聖號簡譜教唱</h1>
+  <p class="lede"><b>第一部分</b>七句、每句六個音，對應「南無阿彌陀佛」六字，唱名與加字兩遍原音都收了。<b>第二部分</b>是另一個調（1 = E，高一個全音）、節奏較快的版本：多了一句十音的起腔，其後各句與第一部分同旋律，但一句只唱「阿彌陀佛」四字。</p>
+  <div class="source">
+    <span>1 = D</span><span>每句 8 拍</span><span>唱名版 57:13–58:21</span><span>加字版 59:41.9–60:39</span><span>第七句 61:06.8 齊唱</span><span>第二部分 1:11:42–1:12:38</span><span>第二部分唱名第二遍 1:12:55</span><span>第二部分加字 1:15:05</span><span>起信論影片齊唱</span>
+  </div>
+</header>
+
+<div class="console"><div class="console-in">
+  <div class="ctl">
+    <label>部分</label>
+    <span class="seg">
+      <button id="pt0" aria-pressed="true">第一部分</button>
+      <button id="pt1" aria-pressed="false">第二部分</button>
+    </span>
+  </div>
+  <div class="ctl">
+    <label>版本</label>
+    <span class="seg">
+      <button id="mSolfa" aria-pressed="true">唱名</button>
+      <button id="mLyric" aria-pressed="false">加字</button>
+    </span>
+  </div>
+  <div class="ctl">
+    <label for="tempo">速度</label>
+    <input type="range" id="tempo" min="52" max="144" step="2" value="112">
+    <span class="val" id="tempoV">112 BPM</span>
+  </div>
+  <div class="ctl">
+    <label for="key">調高</label>
+    <select id="key">
+      <option value="45">1 = A（低）</option>
+      <option value="48">1 = C</option>
+      <option value="50" selected>1 = D（老師原調）</option>
+      <option value="52">1 = E</option>
+      <option value="53">1 = F</option>
+      <option value="55">1 = G</option>
+    </select>
+  </div>
+  <label class="toggle"><input type="checkbox" id="accomp" checked>原音配琴音</label>
+  <label class="toggle"><input type="checkbox" id="muyu" checked>木魚拍子</label>
+  <label class="toggle"><input type="checkbox" id="drone" checked>持續音</label>
+  <div class="spacer"></div>
+  <button class="primary" id="playAll">整曲連播</button>
+  <button id="stopBtn">停止</button>
+</div></div>
+
+<div class="now">
+  <div class="now-digit" id="nowDigit">5</div>
+  <div class="now-meta">
+    <p class="now-name" id="nowName">Sol · 嗦</p>
+    <p class="now-sub" id="nowSub">第 1 句 · 第 1 音 · A2 · 1 拍</p>
+  </div>
+  <div class="now-state">
+    狀態
+    <strong id="nowState">待機</strong>
+    <div class="beats" id="beats"></div>
+  </div>
+</div>
+
+<h2 class="sect">逐句練習<span id="partNote" style="font-family:'Noto Sans TC';font-size:12.5px;font-weight:400;color:var(--gold);letter-spacing:.04em;margin-left:12px"></span></h2>
+<p class="sect-note">「琴音」聽準音高，「唱名原音」「加字原音」是老師兩遍教唱的原聲——開著上方的「原音配琴音」時，琴音會跟著原音的實際節奏一起響，當伴奏用；關掉就是純原聲。「教唱循環」唱一遍留一遍空給你跟唱。</p>
+<div class="phrases" id="phrases"></div>
+
+<details class="notes-sect">
+  <summary>讀譜對照與音源說明（點開）</summary>
+  <h3>讀譜對照</h3>
+  <p>白板上的簡譜先用音高分析核對過老師的實際唱音，七句逐句吻合。下表是核對結果：</p>
+  <div class="tbl"><table>
+    <thead><tr><th>句</th><th>簡譜</th><th>實際唱音</th></tr></thead>
+    <tbody id="verify"></tbody>
+  </table></div>
+  <p style="margin-top:14px">每句節奏一致：前四音各一拍，末二音各兩拍，合計八拍。第三句多一個音（六字中有一字唱兩個音），是六個一拍加一個兩拍。</p>
+
+  <h3 style="margin-top:26px">起信論影片裡有什麼</h3>
+  <p>另一段影片（大乘起信論直詮，2 分 35 秒）整段是連續齊唱，逐段分析後分成兩塊：</p>
+  <p><b>0–88 秒唱的是第一部分</b>的旋律，慢速（每句約 4.2 秒）、1 = E，七句一輪、連唱三輪，換氣點與樂句邊界完全對齊。判定依據有三：輪長是七句不是八句；起句是平的 <b>5̣ 5̣ 5̣ 6̣ 1– 1–</b>，三次出現都沒有下沉到第二部分那個 3̣（約 44）；三整輪裡沒有任何一段是十音起腔該有的長度。第二輪七句已逐句核對，收進第一部分各句的「齊唱（慢）」按鈕。對齊時測出的音高偏移是 +1.75 到 +2.57 半音（相對第一部分的 D 調），獨立印證了 E 調。</p>
+  <p><b>97.4 秒起是第二部分</b>：97.40–104.92 這一段正是<b>十音起腔</b>，十個音有九個吻合，而且第一音與第七音時長 1.14 / 0.98 秒、其餘各音約 0.5 秒——又一次印證白板上那兩個 <b>1·</b> 附點。它收進第二部分第一句的「齊唱起腔」按鈕（該句此前只有教唱範唱）。</p>
+  <p>105–147 秒雖然也是第二部分的旋律，但<b>沒有切成逐句片段</b>：那一段唱得快且加花，換氣點與樂句邊界不對齊（有的一段裡塞了兩句，有的只是零碎片段），硬切會切錯，所以沒做。起腔的第九音（本該是 3）唱得偏低被讀成 2，DTW 無法安置，該句的逐音起唱時刻是依實測音高事件推的。</p>
+
+  <h3 style="margin-top:26px">第二部分的加字原音是怎麼找到的</h3>
+  <p>加字版藏在 74:37.5–75:42.8 那一段的後半：<b>前六段是唱名，第七段（75:05.35）起才是加字</b>。分界有兩個互相印證的依據。其一是段長：唱名各段 1.87–2.10 秒，加字各段 2.32–2.52 秒，唱字比唱名慢，中間有明顯落差。其二是句序：第六段唱的是第八句（<b>1 2 1 6̣ 5̣ 5̣</b>，下行收在低音），第七段又回到第二句（<b>5̣ 3̣ 5̣ 6̣ 1– 1–</b>，上行收在 1）——那是新一遍的開頭。</p>
+  <p>逐段核對後，加字版涵蓋<b>第二句到第七句</b>：75:05.35 / 75:10.20 / 75:15.26 / 75:20.70 / 75:26.20 / 75:31.48。最後一段（75:37.10）又是第二句的上行輪廓，不是第八句，所以<b>第一句（十音起腔）與第八句沒有加字原音</b>。</p>
+  <p>順帶一提，第二句的低音 <b>3̣</b> 在這一遍第一次被獨立測到（讀數 45.8，是所有段裡最低的），此前它一直被連音線裹在 5̣ 裡測不出來。另兩點如實交代：這一遍第二句的逐音起唱時刻與第一部分第一句一樣是依實測音高事件推的（DTW 對同音相鄰段會退化）；第六句對齊代價 1.11，是六段裡最高的。</p>
+
+  <h3 style="margin-top:26px">第二部分還有哪些原音</h3>
+  <p>掃描 1:12:40–1:25:00 後，找到三處帶跟唱留空的逐句教唱：<b>72:54.6–73:30.3（八段）</b>、74:01.8–74:28.2（六段）、74:37.5–75:42.8（十三段）。第一處已逐句核對，唱的正是第二部分的第二句到第八句，加上最後一段回起句（<b>5̣ 5̣ 5̣ 6̣ 1– 1–</b>，沒有第二句那個低音下沉），已收進網頁，按鈕標為「唱名 第二遍」。</p>
+  <p>這一遍已聽辨確認唱的是<b>唱名</b>，不是字。它比第一遍快（每句約 2.0 秒，第一遍約 2.5 秒），所以兩遍剛好可以當<b>由慢到快</b>的兩級練習：先跟第一遍把音唱準，再跟第二遍提速。</p>
+  <p>順帶說明一個限制：唱名與加字唱的是同一條旋律，音高分析<b>分不出老師唱的是唱名還是字</b>，這一點只能靠聽。所以第二部分的加字原音還缺，另外兩處教唱（74:01.8 起六段、74:37.5 起十三段）是候選。</p>
+  <p>另外，1:17:19–1:18:20 這個區間經量化判定（最長穩定音、有聲占比、穩定帧占比）是<b>慢速的連續演唱</b>夾幾句口語，十二段之間的間隔全在 0.31–0.64 秒，沒有跟唱留空，音長 0.4–1.2 秒（教唱那遍是 0.35 秒）。它不是逐句教唱，所以沒有按原樣切成逐句片段。若要用它，我得從連唱裡找換氣點來切，邊界不如教唱乾淨。</p>
+
+  <h3 style="margin-top:26px">第二部分的讀譜對照</h3>
+  <p>第二部分是 <b>1 = E</b>（比第一部分高一個全音），每音約 0.35 秒、多為半拍，與白板上的下劃線相符。八段原音逐段核對如下：</p>
+  <div class="tbl"><table>
+    <thead><tr><th>句</th><th>簡譜</th><th>實際唱音</th></tr></thead>
+    <tbody id="verify2"></tbody>
+  </table></div>
+  <p style="margin-top:14px">兩個獨立印證值得一提。其一，第一句的第 1 音與第 7 音實測時長明顯較長（1.06 秒、0.78 秒），其餘各音約 0.35 秒——正好對應白板上那兩個 <b>1·</b> 附點音符；我並未按附點去設參數，是測量自己撞上去的。其二，第四到第八句的音級序列與第一部分的第三到第七句<b>完全相同</b>，只是升高一個全音、速度加快，所以會的第一部分，這幾句直接就會。</p>
+  <p>兩點如實交代：第六句（同第一部分第五句）的對齊代價 1.21，是八段裡最高的，節奏可能有偏差；第二句裡低音的 <b>3̣</b> 音高跟蹤沒有獨立測到，是依白板讀譜與連音線判定的。白板只在前兩行標了字，第四句以後沒有字，所以切到加字版時那幾句仍顯示唱名。</p>
+
+  <h3 style="margin-top:26px">琴音怎麼跟上原音</h3>
+  <p>老師是自由節奏唱的，琴音若按節拍器走會越走越偏。所以每段原音都先做了逐音對齊：用 DTW 把音高曲線比對到已知的音符序列，量出<b>每個音的實際起唱時刻</b>，琴音就照這些時刻發聲，木魚也落在同樣的點上（兩拍的音在中間補一下）。測出的相鄰間隔是 0.4–0.6 秒，末音約 1.0 秒，與記譜的「四個一拍加兩個兩拍」相符。</p>
+  <p>音高也一併對齊：每段量出老師實際唱的整體偏移（多在 +0.25 到 +0.5 半音之間，第七句齊唱是 +1.0），跟原音時琴音就用原音自己的音高，<b>不受「調高」影響</b>——「調高」只作用於單獨聽琴音的時候。</p>
+  <p>第一句的三個同音（A2）DTW 無法從音高上區分，其起唱時刻是依該段逐音檢測的區段邊界按拍數分配的。</p>
+
+  <h3 style="margin-top:26px">加字版這一遍的實情</h3>
+  <p>加字版教唱始於 59:41.9。之前 59:40.0–59:41.4 是法師講「跟著一起唱」的口語，已整段排除，不在任何片段裡。</p>
+  <p>這一遍逐句教了<b>第一句到第六句</b>，第七段（60:35.1）唱的是<b>第一句 Refrain 再一遍</b>，不是第七句——音高是上行 A2→D3 長音，與第七句的下行 D3→A2 明顯不同。60:39 之後轉為連續齊唱，不再留空跟唱。</p>
+  <p>第七句的加字原音因此改從連續齊唱裡取：整遍齊唱的順序是第一句到第七句再回第一句，第七句落在 <b>61:06.75–61:10.86</b>（前後各有 0.4 秒與 0.5 秒換氣，邊界在 −24dB 到 −18dB 三個閾值下一致）。它是<b>大眾齊唱</b>而非老師獨唱，音高比其他六句整體偏高約半音到一音，按鈕上標了「齊唱」以示區別。</p>
+  <p>第三句七個音配六個字，多出的一音<b>落在「陀」</b>：「陀」先唱 2（Re）再唱 3（Mi），「佛」才落到最後的長音 5（Sol）。這一點音高與起音檢測都判不出來（唱旋律音時每個音都會重新起氣，六個字檢出八個起音），是聽原音確認的。</p>
+
+  <div class="next">
+    <h3>下一步要加的內容</h3>
+    <ul>
+      <li>第二部分第三句「阿彌陀佛」四字怎麼對進六個音（現在有加字原音可聽辨了）</li>
+      <li>第二部分第八句的加字原音（教唱那一遍沒唱到）</li>
+      <li>起信論影片 105–147 秒若要逐句切，需要人工定換氣點</li>
+      <li>第二部分第一句（十音起腔）目前只有一段範唱原音</li>
+      <li>加入老師講解的段落，不只是範唱</li>
+      <li>跟唱錄音與原音對比</li>
+    </ul>
+  </div>
+</details>
+</div>
+
+<script>
+const CLIP_MODE = "files";
+const CLIPS_S = ["audio/S0.mp3", "audio/S1.mp3", "audio/S2.mp3", "audio/S3.mp3", "audio/S4.mp3", "audio/S5.mp3", "audio/S6.mp3"];   /* 唱名版 7 句 */
+const CLIPS_L = ["audio/L0.mp3", "audio/L1.mp3", "audio/L2.mp3", "audio/L3.mp3", "audio/L4.mp3", "audio/L5.mp3", "audio/L6.mp3"];   /* 第一部分 加字版 7 句 */
+const CLIPS_Q = ["audio/Q0.mp3", "audio/Q1.mp3", "audio/Q2.mp3", "audio/Q3.mp3", "audio/Q4.mp3", "audio/Q5.mp3", "audio/Q6.mp3", "audio/Q7.mp3"];   /* 第二部分 唱名版 8 句 */
+const CLIPS_R = ["audio/R0.mp3", "audio/R1.mp3", "audio/R2.mp3", "audio/R3.mp3", "audio/R4.mp3", "audio/R5.mp3", "audio/R6.mp3"];   /* 第二部分 1:12:55 那一遍 第2–8句 */
+const CLIPS_M = ["audio/M0.mp3", "audio/M1.mp3", "audio/M2.mp3", "audio/M3.mp3", "audio/M4.mp3", "audio/M5.mp3"];   /* 第二部分 加字版 第2–7句 (75:05 起) */
+const CLIPS_V = ["audio/V0.mp3", "audio/V1.mp3", "audio/V2.mp3", "audio/V3.mp3", "audio/V4.mp3", "audio/V5.mp3", "audio/V6.mp3"];   /* 起信論影片 第一部分齊唱(慢) 七句 */
+const CLIPS_W = ["audio/W0.mp3"];   /* 起信論影片 第二部分起腔 */
+const CLIPSET = {S:CLIPS_S, L:CLIPS_L, Q:CLIPS_Q, R:CLIPS_R, M:CLIPS_M, V:CLIPS_V, W:CLIPS_W};
+/* 每段原音逐音的實測起唱時刻、末音時間、整體音高偏移(半音) */
+const ALIGN = {"S1": {"onsets": [0.0, 0.48, 0.97, 1.5, 2.06, 3.12], "end": 4.184, "off": 0.25, "cost": 0.581}, "S2": {"onsets": [0.0, 0.56, 1.072, 1.624, 2.04, 2.776], "end": 3.784, "off": 0.5, "cost": 0.565}, "S3": {"onsets": [0.0, 0.624, 1.176, 1.744, 2.128, 2.592, 3.16], "end": 3.68, "off": 0.0, "cost": 0.563}, "S4": {"onsets": [0.0, 0.672, 1.032, 1.528, 2.216, 2.96], "end": 3.832, "off": 0.25, "cost": 0.652}, "S5": {"onsets": [0.0, 0.512, 1.056, 1.664, 2.152, 2.884], "end": 3.664, "off": 0.0, "cost": 0.81}, "S6": {"onsets": [0.0, 0.592, 1.096, 1.56, 1.904, 2.724], "end": 3.528, "off": -0.25, "cost": 0.611}, "S7": {"onsets": [0.0, 0.6, 1.064, 1.512, 1.992, 3.056], "end": 3.912, "off": 0.5, "cost": 0.879}, "L1": {"onsets": [0.0, 0.592, 1.136, 1.656, 2.144, 3.168], "end": 3.984, "off": 0.5, "cost": 1.036}, "L2": {"onsets": [0.0, 0.568, 1.264, 1.792, 2.304, 3.32], "end": 4.28, "off": 0.0, "cost": 0.551}, "L3": {"onsets": [0.0, 0.728, 1.24, 1.872, 2.304, 2.936, 3.48], "end": 4.328, "off": 0.25, "cost": 0.777}, "L4": {"onsets": [0.0, 0.632, 1.072, 1.64, 2.128, 3.068], "end": 3.984, "off": 0.25, "cost": 0.845}, "L5": {"onsets": [0.0, 0.672, 1.064, 1.672, 2.128, 3.108], "end": 4.032, "off": 0.0, "cost": 0.776}, "L6": {"onsets": [0.0, 0.672, 1.192, 1.64, 2.2, 3.224], "end": 4.152, "off": 0.25, "cost": 0.76}, "L7": {"onsets": [0.0, 0.656, 0.912, 1.568, 1.984, 3.088], "end": 4.152, "off": 1.0, "cost": 0.948}, "Q1": {"onsets": [0.0, 1.064, 1.384, 1.752, 2.224, 2.592, 3.04, 3.816, 4.184, 4.6], "end": 5.728, "off": 0.25, "cost": 0.562, "unit": 0.368, "beats": [1.5, 0.5, 0.5, 0.75, 0.5, 0.5, 1.0, 0.5, 0.5, 1.5]}, "Q2": {"onsets": [0.0, 0.408, 0.656, 1.064, 1.448, 1.932], "end": 2.448, "off": 0.0, "cost": 0.602, "unit": 0.408, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q3": {"onsets": [0.0, 0.344, 0.672, 1.072, 1.52, 1.92], "end": 2.432, "off": 0.0, "cost": 0.595, "unit": 0.4, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q4": {"onsets": [0.0, 0.496, 0.856, 1.176, 1.52, 1.872, 2.232], "end": 2.728, "off": -0.5, "cost": 0.705, "unit": 0.36, "beats": [0.75, 0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q5": {"onsets": [0.0, 0.376, 0.728, 1.064, 1.448, 2.068], "end": 2.688, "off": 0.0, "cost": 0.717, "unit": 0.364, "beats": [0.5, 0.5, 0.5, 0.5, 0.75, 0.75]}, "Q6": {"onsets": [0.0, 0.336, 0.624, 1.152, 1.504, 2.052], "end": 2.608, "off": -0.25, "cost": 1.214, "unit": 0.44, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q7": {"onsets": [0.0, 0.384, 0.768, 1.096, 1.4, 1.896], "end": 2.488, "off": -0.5, "cost": 0.489, "unit": 0.384, "beats": [0.5, 0.5, 0.5, 0.5, 0.75, 0.75]}, "Q8": {"onsets": [0.0, 0.4, 0.704, 0.992, 1.512, 2.04], "end": 2.568, "off": -0.5, "cost": 0.625, "unit": 0.46, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]}, "R2": {"onsets": [0.0, 0.328, 0.56, 0.88, 1.176, 1.584], "end": 2.032, "off": 0.25, "cost": 0.851}, "R3": {"onsets": [0.0, 0.288, 0.56, 0.872, 1.12, 1.624], "end": 2.128, "off": 0.0, "cost": 0.421}, "R4": {"onsets": [0.0, 0.4, 0.632, 0.952, 1.264, 1.488, 1.8], "end": 2.248, "off": -0.5, "cost": 0.764}, "R5": {"onsets": [0.0, 0.312, 0.608, 0.912, 1.128, 1.568], "end": 2.008, "off": 0.0, "cost": 0.531}, "R6": {"onsets": [0.0, 0.288, 0.696, 0.848, 1.2, 1.64], "end": 2.072, "off": -0.25, "cost": 0.93}, "R7": {"onsets": [0.0, 0.312, 0.664, 0.88, 1.088, 1.544], "end": 2.0, "off": -0.5, "cost": 0.567}, "R8": {"onsets": [0.0, 0.296, 0.576, 0.752, 1.008, 1.48], "end": 1.952, "off": 0.0, "cost": 0.638}, "M2": {"onsets": [0.1, 0.37, 0.64, 0.9, 1.42, 1.81], "end": 2.152, "off": -0.25, "cost": 0.976}, "M3": {"onsets": [0.0, 0.408, 0.645, 0.872, 1.328, 1.908], "end": 2.488, "off": -0.25, "cost": 0.957}, "M4": {"onsets": [0.0, 0.36, 0.8, 1.008, 1.384, 1.768, 2.064], "end": 2.544, "off": 0.0, "cost": 0.918}, "M5": {"onsets": [0.0, 0.488, 0.808, 1.16, 1.424, 2.008], "end": 2.592, "off": 0.0, "cost": 0.767}, "M6": {"onsets": [0.0, 0.48, 0.72, 1.008, 1.376, 1.896], "end": 2.448, "off": -0.25, "cost": 1.106}, "M7": {"onsets": [0.0, 0.44, 0.728, 1.088, 1.384, 1.996], "end": 2.632, "off": -0.5, "cost": 0.835}, "V1": {"onsets": [0.0, 0.56, 1.072, 1.608, 2.104, 2.928], "end": 3.96, "off": 2.46, "cost": 0.74}, "V2": {"onsets": [0.0, 0.544, 1.192, 1.664, 2.168, 3.128], "end": 4.008, "off": 2.11, "cost": 0.632}, "V3": {"onsets": [0.0, 0.592, 1.184, 1.736, 2.304, 2.928, 3.512], "end": 4.32, "off": 2.1, "cost": 0.758}, "V4": {"onsets": [0.0, 0.64, 1.36, 1.608, 2.312, 3.272], "end": 4.232, "off": 1.76, "cost": 0.912}, "V5": {"onsets": [0.0, 0.768, 1.184, 1.728, 2.152, 3.228], "end": 4.304, "off": 2.57, "cost": 0.693}, "V6": {"onsets": [0.0, 0.648, 1.12, 1.664, 2.296, 3.212], "end": 4.128, "off": 1.83, "cost": 0.701}, "V7": {"onsets": [0.0, 0.696, 1.032, 1.648, 2.264, 3.148], "end": 4.032, "off": 1.75, "cost": 0.659}, "W1": {"onsets": [0.3, 1.44, 2.03, 2.51, 3.02, 3.55, 4.24, 5.22, 5.81, 6.3], "end": 7.54, "off": 0.25, "cost": 0.544}};
+
+
+const SIX = ["南","無","阿","彌","陀","佛"];
+const P1 = [
+  {no:1, tag:"反覆 Refrain", cs:0, cl:0, notes:[[5,-1,1],[5,-1,1],[5,-1,1],[6,-1,1],[1,0,2],[1,0,2]], syls:SIX},
+  {no:2, tag:"", cs:1, cl:1, notes:[[1,0,1],[1,0,1],[1,0,1],[2,0,1],[3,0,2],[3,0,2]], syls:SIX},
+  {no:3, tag:"「陀」唱兩音", cs:2, cl:2, notes:[[3,0,1],[3,0,1],[2,0,1],[1,0,1],[2,0,1],[3,0,1],[5,0,2]],
+   syls:["南","無","阿","彌","陀","‿","佛"]},
+  {no:4, tag:"", cs:3, cl:3, notes:[[5,0,1],[6,0,1],[5,0,1],[3,0,1],[2,0,2],[2,0,2]], syls:SIX},
+  {no:5, tag:"", cs:4, cl:4, notes:[[3,0,1],[5,0,1],[3,0,1],[2,0,1],[1,0,2],[1,0,2]], syls:SIX},
+  {no:6, tag:"", cs:5, cl:5, notes:[[2,0,1],[3,0,1],[2,0,1],[1,0,1],[6,-1,2],[6,-1,2]], syls:SIX},
+  {no:7, tag:"回第一句 :‖", cs:6, cl:6, clTag:"齊唱", notes:[[1,0,1],[2,0,1],[1,0,1],[6,-1,1],[5,-1,2],[5,-1,2]], syls:SIX},
+];
+P1.forEach(p=>{
+  p.origs=[{k:"S", i:p.cs, label:"唱名原音"}];
+  if(p.cl!=null) p.origs.push({k:"L", i:p.cl, label:"加字原音", tag:p.clTag});
+  p.origs.push({k:"V", i:p.no-1, label:"齊唱", tag:"慢"});   /* 起信論影片 33.2–64.2s */
+});
+
+/* 第二部分: 1 = E, 多為半拍音符; 拍值由原音實測間隔推導 */
+const P2 = [
+  {no:1, tag:"起腔 · 十音", notes:[[1,0,1.5],[2,0,.5],[3,0,.5],[5,0,.75],[3,0,.5],[2,0,.5],[1,0,1],[2,0,.5],[3,0,.5],[1,0,1.5]],
+   syls:["南","無","阿","‿","彌","‿","陀","‿","佛","‿"], origs:[{k:"Q",i:0,label:"老師範唱"}]},
+  {no:2, tag:"四字句", notes:[[5,-1,.5],[3,-1,.5],[5,-1,.5],[6,-1,.5],[1,0,.5],[1,0,.75]],
+   syls:["阿","‿","彌","‿","陀","佛"], origs:[{k:"Q",i:1,label:"唱名原音"}]},
+  {no:3, tag:"四字句 · 字音待確認", notes:[[1,0,.5],[1,0,.5],[1,0,.5],[2,0,.5],[3,0,.5],[3,0,.75]],
+   syls:["阿","彌","‿","陀","佛","‿"], origs:[{k:"Q",i:2,label:"唱名原音"}]},
+  {no:4, tag:"同第一部分第三句", notes:[[3,0,.75],[3,0,.5],[2,0,.5],[1,0,.5],[2,0,.5],[3,0,.5],[5,0,.75]],
+   syls:null, origs:[{k:"Q",i:3,label:"唱名原音"}]},
+  {no:5, tag:"同第一部分第四句", notes:[[5,0,.5],[6,0,.5],[5,0,.5],[3,0,.5],[2,0,.75],[2,0,.75]],
+   syls:null, origs:[{k:"Q",i:4,label:"唱名原音"}]},
+  {no:6, tag:"同第一部分第五句 · 對齊較弱", notes:[[3,0,.5],[5,0,.5],[3,0,.5],[2,0,.5],[1,0,.5],[1,0,.75]],
+   syls:null, origs:[{k:"Q",i:5,label:"唱名原音"}]},
+  {no:7, tag:"同第一部分第六句", notes:[[2,0,.5],[3,0,.5],[2,0,.5],[1,0,.5],[6,-1,.75],[6,-1,.75]],
+   syls:null, origs:[{k:"Q",i:6,label:"唱名原音"}]},
+  {no:8, tag:"同第一部分第七句 :‖", notes:[[1,0,.5],[2,0,.5],[1,0,.5],[6,-1,.5],[5,-1,.5],[5,-1,.5]],
+   syls:null, origs:[{k:"Q",i:7,label:"唱名原音"}]},
+];
+
+/* 1:12:55 那一遍(第2–8句): 已確認為唱名, 速度比第一遍快 (約 2.0s/句 對 2.5s/句) */
+P2.forEach(p=>{ if(p.no>=2 && p.no<=8) p.origs.push({k:"R", i:p.no-2, label:"唱名 第二遍"}); });
+/* 加字版(75:05.35 起)只涵蓋第2–7句 */
+P2.forEach(p=>{ if(p.no>=2 && p.no<=7) p.origs.push({k:"M", i:p.no-2, label:"加字原音"}); });
+/* 起信論影片 97.4s 的十音起腔 */
+P2[0].origs.push({k:"W", i:0, label:"齊唱起腔"});
+
+const PARTS=[
+  {id:"p1", name:"第一部分", kind:"S", recBase:50, tempo:112, phrases:P1,
+   note:"六字一句 · 1 = D · 每句八拍"},
+  {id:"p2", name:"第二部分", kind:"Q", recBase:52, tempo:82, phrases:P2,
+   note:"多為半拍音符 · 1 = E · 白板只在前兩行標了字"},
+];
+let PART=PARTS[0], PHRASES=PART.phrases;
+
+const VERIFY2 = [
+  ["1","1· 2 3 5 3 2 1· 2 3 1–","E3 F♯3 G♯3 B3 G♯3 F♯3 E3 F♯3 G♯3 E3"],
+  ["2","5̣ 3̣ 5̣ 6̣ 1 1–","B2 …低音區… C♯3 E3"],
+  ["3","1 1 1 2 3 3–","E3 E3 E3 F♯3 G♯3"],
+  ["4","3 3 2 1 2 3 5","G♯3 G♯3 F♯3 E3 F♯3 G♯3 B3"],
+  ["5","5 6 5 3 2 2–","B3 C♯4 B3 G♯3 F♯3"],
+  ["6","3 5 3 2 1 1–","G♯3 B3 G♯3 F♯3 E3"],
+  ["7","2 3 2 1 6̣ 6̣–","F♯3 G♯3 F♯3 E3 C♯3"],
+  ["8","1 2 1 6̣ 5̣ 5̣","E3 F♯3 E3 C♯3 B2"],
+];
+const VERIFY = [
+  ["1","5̣ 5̣ 5̣ 6̣ 1– 1–","A2 A2 A2 B2 D3"],
+  ["2","1 1 1 2 3– 3–","D3 D3 D3 E3 F♯3"],
+  ["3","3 3 2 1 2 3 5–","F♯3 F♯3 E3 D3 E3 F♯3 A3"],
+  ["4","5 6 5 3 2– 2–","A3 B3 A3 F♯3 E3"],
+  ["5","3 5 3 2 1– 1–","F♯3 A3 F♯3 E3 D3"],
+  ["6","2 3 2 1 6̣– 6̣–","E3 F♯3 E3 D3 B2"],
+  ["7","1 2 1 6̣ 5̣– 5̣–","D3 E3 D3 B2 A2"],
+];
+
+const SEMI = {1:0,2:2,3:4,4:5,5:7,6:9,7:11};
+const SOLFA = {1:["Do","哆"],2:["Re","唻"],3:["Mi","咪"],4:["Fa","發"],5:["Sol","嗦"],6:["La","啦"],7:["Si","西"]};
+const PC = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+
+const $ = s => document.querySelector(s);
+const tempoEl=$("#tempo"), tempoV=$("#tempoV"), keyEl=$("#key");
+const muyuEl=$("#muyu"), droneEl=$("#drone"), accompEl=$("#accomp");
+const nowDigit=$("#nowDigit"), nowName=$("#nowName"), nowSub=$("#nowSub"), nowState=$("#nowState");
+const beatsEl=$("#beats");
+
+let ctx=null, master=null, bus=null, playing=false, token=0, timers=[];
+
+function audio(){
+  if(!ctx){
+    ctx = new (window.AudioContext||window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value=0.9; master.connect(ctx.destination);
+  }
+  if(ctx.state==="suspended") ctx.resume();
+  return ctx;
+}
+/* 所有發聲都掛在這條總線上，按停止時整條靜音並斷開，
+   已排進時間軸的音符才能真的停下來 */
+function out(){
+  if(!bus){ bus=ctx.createGain(); bus.gain.value=1; bus.connect(master); }
+  return bus;
+}
+function killBus(){
+  if(!bus) return;
+  const old=bus, t=ctx.currentTime;
+  try{
+    old.gain.cancelScheduledValues(t);
+    old.gain.setValueAtTime(old.gain.value, t);
+    old.gain.linearRampToValueAtTime(0, t+0.05);
+  }catch(e){}
+  setTimeout(()=>{ try{ old.disconnect(); }catch(e){} }, 250);
+  bus=null;
+}
+function beatDur(){ return 60/parseInt(tempoEl.value,10); }
+function midiOf(n){ return parseInt(keyEl.value,10) + SEMI[n[0]] + 12*n[1]; }
+function hz(m){ return 440*Math.pow(2,(m-69)/12); }
+function noteName(m){ return PC[((m%12)+12)%12] + (Math.floor(m/12)-1); }
+
+/* 人聲感的唱音：正弦為主 + 少量三角泛音 + 輕微顫音 */
+function tone(t, midi, dur){
+  const g=ctx.createGain(); g.connect(out());
+  const f=hz(midi);
+  const o1=ctx.createOscillator(); o1.type="sine"; o1.frequency.value=f;
+  const o2=ctx.createOscillator(); o2.type="triangle"; o2.frequency.value=f;
+  const g2=ctx.createGain(); g2.gain.value=0.16; o2.connect(g2); g2.connect(g);
+  o1.connect(g);
+  const lfo=ctx.createOscillator(); lfo.frequency.value=5.2;
+  const lg=ctx.createGain(); lg.gain.value=f*0.004;
+  lfo.connect(lg); lg.connect(o1.frequency); lg.connect(o2.frequency);
+  const a=0.045, r=Math.min(0.22, dur*0.35);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(0.30,t+a);
+  g.gain.setValueAtTime(0.30,t+Math.max(a,dur-r));
+  g.gain.exponentialRampToValueAtTime(0.0008,t+dur+0.02);
+  [o1,o2,lfo].forEach(o=>{o.start(t); o.stop(t+dur+0.06)});
+}
+
+/* 木魚：短促的木質敲擊聲 */
+function muyu(t){
+  const dur=0.09;
+  const buf=ctx.createBuffer(1, Math.ceil(ctx.sampleRate*dur), ctx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,7); }
+  const src=ctx.createBufferSource(); src.buffer=buf;
+  const bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=1150; bp.Q.value=2.2;
+  const g=ctx.createGain(); g.gain.value=0.5;
+  src.connect(bp); bp.connect(g); g.connect(out());
+  const blip=ctx.createOscillator(); blip.type="sine"; blip.frequency.setValueAtTime(760,t);
+  blip.frequency.exponentialRampToValueAtTime(330,t+0.06);
+  const bg=ctx.createGain();
+  bg.gain.setValueAtTime(0.16,t); bg.gain.exponentialRampToValueAtTime(0.0008,t+0.07);
+  blip.connect(bg); bg.connect(out());
+  src.start(t); blip.start(t); blip.stop(t+0.09);
+}
+
+/* 持續音：1 與 5 的低音襯底 */
+function drone(t, dur){
+  const base=parseInt(keyEl.value,10)-12;
+  [base, base+7].forEach((m,i)=>{
+    const o=ctx.createOscillator(); o.type="sine"; o.frequency.value=hz(m);
+    const g=ctx.createGain(); g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(i?0.045:0.06, t+0.35);
+    g.gain.setValueAtTime(i?0.045:0.06, t+dur-0.4);
+    g.gain.linearRampToValueAtTime(0, t+dur);
+    o.connect(g); g.connect(out()); o.start(t); o.stop(t+dur+0.1);
+  });
+}
+
+function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
+
+function setNow(pi, ni){
+  const p=PHRASES[pi], n=p.notes[ni], m=midiOf(n);
+  const dots = n[1]>0 ? '<span class="dot up"></span>' : (n[1]<0 ? '<span class="dot down"></span>' : '');
+  nowDigit.innerHTML = n[0] + dots;
+  const syl = p.syls[ni] || "";
+  nowName.textContent = (document.body.dataset.mode==="lyric" && syl && syl!=="‿")
+    ? syl + " · " + SOLFA[n[0]][0]
+    : SOLFA[n[0]][0] + " · " + SOLFA[n[0]][1];
+  nowSub.textContent = `第 ${p.no} 句 · 第 ${ni+1} 音 · ${noteName(m)} · ${n[2]} 拍`;
+}
+function highlight(pi, ni){
+  document.querySelectorAll(".cell.on").forEach(e=>e.classList.remove("on"));
+  document.querySelectorAll(".phrase.active").forEach(e=>e.classList.remove("active"));
+  if(pi==null) return;
+  document.querySelector(`#phrase-${pi}`).classList.add("active");
+  const c=document.querySelector(`#cell-${pi}-${ni}`);
+  if(c) c.classList.add("on");
+  setNow(pi, ni);
+}
+function renderBeats(k){
+  beatsEl.innerHTML="";
+  for(let i=0;i<k;i++){ const d=document.createElement("i"); d.className="beat"; beatsEl.appendChild(d); }
+}
+function lightBeat(i){
+  const bs=beatsEl.children;
+  for(const b of bs) b.classList.remove("on");
+  if(bs[i]) bs[i].classList.add("on");
+}
+
+function phraseBeats(p){ return p.notes.reduce((s,n)=>s+n[2],0); }
+
+/* 排一句的琴音；回傳這句的總秒數 */
+function schedulePhrase(pi, t0, myToken){
+  const p=PHRASES[pi], bd=beatDur();
+  const total=phraseBeats(p)*bd;
+  if(droneEl.checked) drone(t0, total+0.15);
+  let beat=0;
+  p.notes.forEach((n,ni)=>{
+    const t=t0+beat*bd, dur=n[2]*bd*0.92;
+    tone(t, midiOf(n), dur);
+    const ms=(t-ctx.currentTime)*1000;
+    later(()=>{ if(token===myToken){ highlight(pi,ni); lightBeat(ni); } }, Math.max(0,ms));
+    beat+=n[2];
+  });
+  if(muyuEl.checked){
+    const nb=Math.round(phraseBeats(p)/0.5);
+    for(let b=0;b<nb;b++){
+      if(PART.id==="p1" && b%2) continue;     /* 第一部分打整拍 */
+      muyu(t0+b*0.5*bd);
+    }
+  }
+  return total;
+}
+
+function setFab(on){ const f=$("#fab"); if(f) f.classList.toggle("on", !!on); }
+
+function stopAll(){
+  token++; clearTimers(); playing=false; setFab(false);
+  if(ctx) killBus();
+  document.querySelectorAll(".loopBtn[aria-pressed='true']").forEach(b=>b.setAttribute("aria-pressed","false"));
+  highlight(null); nowState.textContent="待機";
+  for(const b of beatsEl.children) b.classList.remove("on");
+}
+
+function playPhrase(pi){
+  stopAll(); audio(); const my=++token; playing=true;
+  setArmed(pi,-1); setFab(true);
+  nowState.textContent="琴音示範";
+  renderBeats(PHRASES[pi].notes.length);
+  const total=schedulePhrase(pi, ctx.currentTime+0.12, my);
+  later(()=>{ if(token===my){ nowState.textContent="待機"; playing=false; setFab(false); } }, total*1000+300);
+}
+
+function playAll(){
+  stopAll(); audio(); const my=++token; playing=true;
+  nowState.textContent="整曲連播";
+  let t=ctx.currentTime+0.15;
+  PHRASES.forEach((p,pi)=>{
+    const total=schedulePhrase(pi, t, my);
+    later(()=>{ if(token===my) renderBeats(p.notes.length); }, Math.max(0,(t-ctx.currentTime)*1000));
+    t += total + beatDur()*0.5;
+  });
+  later(()=>{ if(token===my){ nowState.textContent="待機"; playing=false; highlight(null);} },
+        (t-ctx.currentTime)*1000+200);
+}
+
+/* 教唱循環：唱一遍，留同樣長度的空給你跟唱 */
+/* 教唱循環: 循環「當前選中的音源」—— 琴音 / 唱名原音 / 加字原音 / 齊唱 都可以,
+   唱一遍留一遍等長的空給你跟唱, 留空期間木魚繼續打拍 */
+async function loopArmed(pi, btn){
+  if(btn.getAttribute("aria-pressed")==="true"){ stopAll(); return; }
+  stopAll(); audio(); const my=++token;
+  btn.setAttribute("aria-pressed","true");
+  playing=true; setFab(true);
+  const p=PHRASES[pi], idx=(pi in armed)?armed[pi]:-1, label=srcLabel(pi,idx);
+  renderBeats(p.notes.length);
+
+  let og=null, al=null, buf=null;
+  if(idx>=0){
+    og=p.origs[idx]; al=ALIGN[og.k+p.no];
+    nowState.textContent="載入中…";
+    try{ buf=await getBuf(og.k, og.i); }
+    catch(e){ nowState.textContent="音檔載入失敗"; btn.setAttribute("aria-pressed","false"); return; }
+    if(token!==my) return;
+  }
+
+  const round = () => {
+    if(token!==my) return;
+    const t0=ctx.currentTime+0.08;
+    const dur = (idx<0) ? schedulePhrase(pi, t0, my)
+                        : scheduleClipAt(pi, og, al, buf, t0, my);
+    nowState.textContent="範唱 · "+label;
+    later(()=>{ if(token===my){ nowState.textContent="請跟唱 · "+label; highlight(null); } },
+          (t0-ctx.currentTime+dur)*1000);
+    if(idx<0){
+      if(muyuEl.checked){
+        const bd=beatDur(), nb=Math.round(phraseBeats(p)/0.5);
+        for(let b=0;b<nb;b++){ if(PART.id==="p1" && b%2) continue; muyu(t0+dur+b*0.5*bd); }
+      }
+    }else{
+      gapMuyu(pi, al, t0+dur+0.1);
+    }
+    later(round, (t0-ctx.currentTime+dur*2+0.45)*1000);
+  };
+  round();
+}
+
+/* ---------- 每句「選中的音源」: -1 = 琴音, 0.. = origs 索引 ---------- */
+const armed={};
+function srcLabel(pi, idx){ return idx<0 ? "琴音" : PHRASES[pi].origs[idx].label; }
+function setArmed(pi, idx){
+  armed[pi]=idx;
+  const row=document.querySelector(`#phrase-${pi}`);
+  if(!row) return;
+  row.querySelectorAll("[data-src]").forEach(b=>
+    b.setAttribute("aria-checked", String(parseInt(b.dataset.src,10)===idx)));
+  const lb=row.querySelector(".loopBtn");
+  if(lb) lb.textContent="↻ 循環："+srcLabel(pi,idx);
+}
+
+/* 老師原音: 解碼成 AudioBuffer, 與琴音共用同一個 AudioContext 時鐘 */
+const bufCache={};
+function b64ToArrayBuffer(b64){
+  const bin=atob(b64), u=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+  return u.buffer;
+}
+async function getBuf(kind, idx){
+  const key=kind+idx;
+  if(bufCache[key]) return bufCache[key];
+  const ref=CLIPSET[kind][idx];
+  let ab;
+  if(CLIP_MODE==="files"){          /* 網站版: 音檔獨立, 按需下載 */
+    const r=await fetch(ref);
+    if(!r.ok) throw new Error("音檔載入失敗 "+r.status);
+    ab=await r.arrayBuffer();
+  }else{                            /* Artifact 版: 內嵌 base64 */
+    ab=b64ToArrayBuffer(ref);
+  }
+  const buf=await ctx.decodeAudioData(ab);
+  bufCache[key]=buf; return buf;
+}
+/* 跟原音時, 琴音用原音自己的音高(實測偏移), 不跟隨「調高」 */
+function midiOfRec(n, off){ return PART.recBase + SEMI[n[0]] + 12*n[1] + off; }
+
+/* 排一段原音(可同時排琴音伴奏), 回傳這段的秒數 */
+function scheduleClipAt(pi, og, al, buf, t0, my){
+  const p=PHRASES[pi];
+  const src=ctx.createBufferSource();
+  src.buffer=buf; src.connect(out()); src.start(t0);
+  const withSynth = accompEl.checked && al;
+  if(al){
+    p.notes.forEach((n,ni)=>{
+      const st=al.onsets[ni];
+      const nx=(ni+1<al.onsets.length) ? al.onsets[ni+1] : al.end;
+      const t=t0+st, span=Math.max(0.20, nx-st);
+      if(withSynth){
+        tone(t, midiOfRec(n, al.off), span*0.95);
+        if(muyuEl.checked){
+          muyu(t);
+          if(n[2]>1) muyu(t+span/2);   /* 兩拍音在中間補一下拍子 */
+        }
+      }
+      later(()=>{ if(token===my){ highlight(pi,ni); lightBeat(ni); } },
+            Math.max(0,(t-ctx.currentTime)*1000));
+    });
+    if(withSynth && droneEl.checked) drone(t0, al.end+0.25);
+  }else{
+    later(()=>{ const r=document.querySelector(`#phrase-${pi}`); if(r&&token===my) r.classList.add("active"); },
+          Math.max(0,(t0-ctx.currentTime)*1000));
+  }
+  return buf.duration;
+}
+
+/* 留空跟唱時, 木魚照原音的實測起唱時刻繼續打拍 */
+function gapMuyu(pi, al, t0){
+  if(!muyuEl.checked || !al) return;
+  PHRASES[pi].notes.forEach((n,ni)=>{
+    const st=al.onsets[ni];
+    const nx=(ni+1<al.onsets.length) ? al.onsets[ni+1] : al.end;
+    muyu(t0+st);
+    if(n[2]>1) muyu(t0+st+(nx-st)/2);
+  });
+}
+
+async function playClip(pi, oi){
+  stopAll(); audio(); const my=++token;
+  const p=PHRASES[pi], og=p.origs[oi];
+  if(!og) return;
+  const al = ALIGN[og.k+p.no];
+  setArmed(pi, oi);
+
+  nowState.textContent="載入中…";
+  let buf;
+  try{ buf=await getBuf(og.k, og.i); }
+  catch(e){ nowState.textContent="音檔載入失敗"; return; }
+  if(token!==my) return;
+
+  playing=true; setFab(true);
+  nowState.textContent = og.label + ((accompEl.checked&&al) ? " + 琴音" : "");
+  renderBeats(p.notes.length);
+  const dur=scheduleClipAt(pi, og, al, buf, ctx.currentTime+0.12, my);
+  later(()=>{ if(token===my){ nowState.textContent="待機"; highlight(null); playing=false; setFab(false); } },
+        dur*1000+300);
+}
+
+/* ---------- 建立畫面 ---------- */
+const wrapEl=$("#phrases");
+function buildPhrases(){
+wrapEl.innerHTML="";
+PHRASES.forEach((p,pi)=>{
+  const row=document.createElement("div");
+  row.className="phrase"; row.id="phrase-"+pi;
+  const cells=p.notes.map((n,ni)=>{
+    const dots = n[1]>0 ? '<span class="dot up"></span>' : (n[1]<0 ? '<span class="dot down"></span>' : '');
+    const dash = n[2]>1 ? '<span class="dash">–</span>' : '';
+    const syl = (p.syls && p.syls[ni]) || "";
+    const tie = syl==="‿" ? " tie" : "";
+    return `<div class="cell" id="cell-${pi}-${ni}"><span class="glyph">${n[0]}${dots}</span>
+      <span class="solfa">${SOLFA[n[0]][0]}</span><span class="syl${tie}">${syl}</span></div>${dash}`;
+  }).join("");
+  row.innerHTML = `
+    <div class="pno">${p.no}${p.tag?`<span class="ptag">${p.tag}</span>`:""}</div>
+    <div class="pbody">
+      <div class="notes">${cells}</div>
+      <div class="srcrow">
+        <button data-src="-1" aria-checked="true">▶ 琴音</button>
+        ${p.origs.map((o,oi)=>`<button data-src="${oi}" aria-checked="false">${o.label}${o.tag?`（${o.tag}）`:""}</button>`).join("")}
+      </div>
+      <div class="prow">
+        <button class="loopBtn" aria-pressed="false">↻ 循環：琴音</button>
+        <span class="pinfo">${p.notes.length} 音 · ${((ALIGN[PART.kind+p.no]||{}).end||0).toFixed(1)} 秒</span>
+      </div>
+    </div>`;
+  row.querySelectorAll("[data-src]").forEach(b=>{
+    const i=parseInt(b.dataset.src,10);
+    b.onclick=()=> (i<0 ? playPhrase(pi) : playClip(pi,i));
+  });
+  row.querySelector(".loopBtn").onclick=e=>loopArmed(pi,e.currentTarget);
+  wrapEl.appendChild(row);
+});
+PHRASES.forEach((p,pi)=>setArmed(pi,-1));
+}
+
+const vrow=r=>`<tr><td class="num">${r[0]}</td><td class="num">${r[1]}</td><td>${r[2]}</td></tr>`;
+$("#verify").innerHTML = VERIFY.map(vrow).join("");
+$("#verify2").innerHTML = VERIFY2.map(vrow).join("");
+
+function setPart(i){
+  stopAll();
+  PART=PARTS[i]; PHRASES=PART.phrases;
+  $("#pt0").setAttribute("aria-pressed", String(i===0));
+  $("#pt1").setAttribute("aria-pressed", String(i===1));
+  $("#partNote").textContent=PART.note;
+  keyEl.value=String(PART.recBase);
+  tempoEl.value=String(PART.tempo); tempoV.textContent=PART.tempo+" BPM";
+  buildPhrases();
+  renderBeats(PHRASES[0].notes.length);
+  setNow(0,0);
+}
+$("#pt0").onclick=()=>setPart(0);
+$("#pt1").onclick=()=>setPart(1);
+
+function setMode(m){
+  document.body.dataset.mode=m;
+  $("#mSolfa").setAttribute("aria-pressed", String(m==="solfa"));
+  $("#mLyric").setAttribute("aria-pressed", String(m==="lyric"));
+  setNow(0,0);
+}
+$("#mSolfa").onclick=()=>setMode("solfa");
+$("#mLyric").onclick=()=>setMode("lyric");
+tempoEl.oninput=()=>{ tempoV.textContent=tempoEl.value+" BPM"; };
+$("#playAll").onclick=playAll;
+$("#stopBtn").onclick=stopAll;
+$("#fab").onclick=stopAll;
+keyEl.onchange=()=>setNow(0,0);
+
+setMode("solfa");
+setPart(0);
+</script>
+
+</body>
+</html>
