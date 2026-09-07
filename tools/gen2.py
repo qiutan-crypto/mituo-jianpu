@@ -1,25 +1,27 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EDEAE0">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111828">
-<meta name="description" content="彌陀聖號簡譜逐句教唱：唱名與加字原音、琴音同步伴奏、跟唱留空與木魚拍子。">
-<link rel="icon" type="image/png" sizes="48x48" href="icon-48.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<link rel="apple-touch-icon" sizes="167x167" href="icon-167.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
-<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="apple-mobile-web-app-title" content="彌陀簡譜">
-<meta name="application-name" content="彌陀簡譜">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>彌陀聖號簡譜教唱</title>
+import base64, json, os
+
+def enc(p):
+    """裸 base64: 網頁端解碼成 AudioBuffer, 才能與琴音共用同一個時鐘做取樣級同步"""
+    with open(os.path.expanduser(p), "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+_here = os.path.dirname(os.path.abspath(__file__))
+ALIGN = json.load(open(os.path.join(_here, "onsets.json")))
+ALIGN.update(json.load(open(os.path.join(_here, "onsets2.json"))))
+ALIGN.update(json.load(open(os.path.join(_here, "onsets3.json"))))
+ALIGN.update(json.load(open(os.path.join(_here, "onsets4.json"))))
+ALIGN.update(json.load(open(os.path.join(_here, "onsets5.json"))))
+
+clips_s = [enc(f"~/Desktop/phrases/p{i}.mp3") for i in range(7)]
+clips_l = [enc(f"~/Desktop/lyrics_seg/{c}.mp3") for c in "ABCDEFG"]
+clips_q = [enc(f"~/Desktop/p2/q{i}.mp3") for i in range(8)]
+clips_r = [enc(f"~/Desktop/runA/a{i}.mp3") for i in range(1,8)]
+clips_m = [enc(f"~/Desktop/lyr2/m{i}.mp3") for i in range(2,8)]
+_vid = os.path.join(_here, "vid")
+clips_v = [enc(f"{_vid}/v{i}.mp3") for i in range(1,8)]
+clips_w = [enc(f"{_vid}/w1.mp3")]
+
+HTML = r'''<title>彌陀聖號簡譜教唱</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
@@ -315,8 +317,6 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;c
 }
 
 </style>
-</head>
-<body>
 
 <button id="fab">■ 停止</button>
 
@@ -448,17 +448,17 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;c
 </div>
 
 <script>
-const CLIP_MODE = "files";
-const CLIPS_S = ["audio/S0.mp3", "audio/S1.mp3", "audio/S2.mp3", "audio/S3.mp3", "audio/S4.mp3", "audio/S5.mp3", "audio/S6.mp3"];   /* 唱名版 7 句 */
-const CLIPS_L = ["audio/L0.mp3", "audio/L1.mp3", "audio/L2.mp3", "audio/L3.mp3", "audio/L4.mp3", "audio/L5.mp3", "audio/L6.mp3"];   /* 第一部分 加字版 7 句 */
-const CLIPS_Q = ["audio/Q0.mp3", "audio/Q1.mp3", "audio/Q2.mp3", "audio/Q3.mp3", "audio/Q4.mp3", "audio/Q5.mp3", "audio/Q6.mp3", "audio/Q7.mp3"];   /* 第二部分 唱名版 8 句 */
-const CLIPS_R = ["audio/R0.mp3", "audio/R1.mp3", "audio/R2.mp3", "audio/R3.mp3", "audio/R4.mp3", "audio/R5.mp3", "audio/R6.mp3"];   /* 第二部分 1:12:55 那一遍 第2–8句 */
-const CLIPS_M = ["audio/M0.mp3", "audio/M1.mp3", "audio/M2.mp3", "audio/M3.mp3", "audio/M4.mp3", "audio/M5.mp3"];   /* 第二部分 加字版 第2–7句 (75:05 起) */
-const CLIPS_V = ["audio/V0.mp3", "audio/V1.mp3", "audio/V2.mp3", "audio/V3.mp3", "audio/V4.mp3", "audio/V5.mp3", "audio/V6.mp3"];   /* 起信論影片 第一部分齊唱(慢) 七句 */
-const CLIPS_W = ["audio/W0.mp3"];   /* 起信論影片 第二部分起腔 */
+const CLIP_MODE = "__CLIP_MODE__";
+const CLIPS_S = __CLIPS_S__;   /* 唱名版 7 句 */
+const CLIPS_L = __CLIPS_L__;   /* 第一部分 加字版 7 句 */
+const CLIPS_Q = __CLIPS_Q__;   /* 第二部分 唱名版 8 句 */
+const CLIPS_R = __CLIPS_R__;   /* 第二部分 1:12:55 那一遍 第2–8句 */
+const CLIPS_M = __CLIPS_M__;   /* 第二部分 加字版 第2–7句 (75:05 起) */
+const CLIPS_V = __CLIPS_V__;   /* 起信論影片 第一部分齊唱(慢) 七句 */
+const CLIPS_W = __CLIPS_W__;   /* 起信論影片 第二部分起腔 */
 const CLIPSET = {S:CLIPS_S, L:CLIPS_L, Q:CLIPS_Q, R:CLIPS_R, M:CLIPS_M, V:CLIPS_V, W:CLIPS_W};
 /* 每段原音逐音的實測起唱時刻、末音時間、整體音高偏移(半音) */
-const ALIGN = {"S1": {"onsets": [0.0, 0.48, 0.97, 1.5, 2.06, 3.12], "end": 4.184, "off": 0.25, "cost": 0.581}, "S2": {"onsets": [0.0, 0.56, 1.072, 1.624, 2.04, 2.776], "end": 3.784, "off": 0.5, "cost": 0.565}, "S3": {"onsets": [0.0, 0.624, 1.176, 1.744, 2.128, 2.592, 3.16], "end": 3.68, "off": 0.0, "cost": 0.563}, "S4": {"onsets": [0.0, 0.672, 1.032, 1.528, 2.216, 2.96], "end": 3.832, "off": 0.25, "cost": 0.652}, "S5": {"onsets": [0.0, 0.512, 1.056, 1.664, 2.152, 2.884], "end": 3.664, "off": 0.0, "cost": 0.81}, "S6": {"onsets": [0.0, 0.592, 1.096, 1.56, 1.904, 2.724], "end": 3.528, "off": -0.25, "cost": 0.611}, "S7": {"onsets": [0.0, 0.6, 1.064, 1.512, 1.992, 3.056], "end": 3.912, "off": 0.5, "cost": 0.879}, "L1": {"onsets": [0.0, 0.592, 1.136, 1.656, 2.144, 3.168], "end": 3.984, "off": 0.5, "cost": 1.036}, "L2": {"onsets": [0.0, 0.568, 1.264, 1.792, 2.304, 3.32], "end": 4.28, "off": 0.0, "cost": 0.551}, "L3": {"onsets": [0.0, 0.728, 1.24, 1.872, 2.304, 2.936, 3.48], "end": 4.328, "off": 0.25, "cost": 0.777}, "L4": {"onsets": [0.0, 0.632, 1.072, 1.64, 2.128, 3.068], "end": 3.984, "off": 0.25, "cost": 0.845}, "L5": {"onsets": [0.0, 0.672, 1.064, 1.672, 2.128, 3.108], "end": 4.032, "off": 0.0, "cost": 0.776}, "L6": {"onsets": [0.0, 0.672, 1.192, 1.64, 2.2, 3.224], "end": 4.152, "off": 0.25, "cost": 0.76}, "L7": {"onsets": [0.0, 0.656, 0.912, 1.568, 1.984, 3.088], "end": 4.152, "off": 1.0, "cost": 0.948}, "Q1": {"onsets": [0.0, 1.064, 1.384, 1.752, 2.224, 2.592, 3.04, 3.816, 4.184, 4.6], "end": 5.728, "off": 0.25, "cost": 0.562, "unit": 0.368, "beats": [1.5, 0.5, 0.5, 0.75, 0.5, 0.5, 1.0, 0.5, 0.5, 1.5]}, "Q2": {"onsets": [0.0, 0.408, 0.656, 1.064, 1.448, 1.932], "end": 2.448, "off": 0.0, "cost": 0.602, "unit": 0.408, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q3": {"onsets": [0.0, 0.344, 0.672, 1.072, 1.52, 1.92], "end": 2.432, "off": 0.0, "cost": 0.595, "unit": 0.4, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q4": {"onsets": [0.0, 0.496, 0.856, 1.176, 1.52, 1.872, 2.232], "end": 2.728, "off": -0.5, "cost": 0.705, "unit": 0.36, "beats": [0.75, 0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q5": {"onsets": [0.0, 0.376, 0.728, 1.064, 1.448, 2.068], "end": 2.688, "off": 0.0, "cost": 0.717, "unit": 0.364, "beats": [0.5, 0.5, 0.5, 0.5, 0.75, 0.75]}, "Q6": {"onsets": [0.0, 0.336, 0.624, 1.152, 1.504, 2.052], "end": 2.608, "off": -0.25, "cost": 1.214, "unit": 0.44, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.75]}, "Q7": {"onsets": [0.0, 0.384, 0.768, 1.096, 1.4, 1.896], "end": 2.488, "off": -0.5, "cost": 0.489, "unit": 0.384, "beats": [0.5, 0.5, 0.5, 0.5, 0.75, 0.75]}, "Q8": {"onsets": [0.0, 0.4, 0.704, 0.992, 1.512, 2.04], "end": 2.568, "off": -0.5, "cost": 0.625, "unit": 0.46, "beats": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]}, "R2": {"onsets": [0.0, 0.328, 0.56, 0.88, 1.176, 1.584], "end": 2.032, "off": 0.25, "cost": 0.851}, "R3": {"onsets": [0.0, 0.288, 0.56, 0.872, 1.12, 1.624], "end": 2.128, "off": 0.0, "cost": 0.421}, "R4": {"onsets": [0.0, 0.4, 0.632, 0.952, 1.264, 1.488, 1.8], "end": 2.248, "off": -0.5, "cost": 0.764}, "R5": {"onsets": [0.0, 0.312, 0.608, 0.912, 1.128, 1.568], "end": 2.008, "off": 0.0, "cost": 0.531}, "R6": {"onsets": [0.0, 0.288, 0.696, 0.848, 1.2, 1.64], "end": 2.072, "off": -0.25, "cost": 0.93}, "R7": {"onsets": [0.0, 0.312, 0.664, 0.88, 1.088, 1.544], "end": 2.0, "off": -0.5, "cost": 0.567}, "R8": {"onsets": [0.0, 0.296, 0.576, 0.752, 1.008, 1.48], "end": 1.952, "off": 0.0, "cost": 0.638}, "M2": {"onsets": [0.1, 0.37, 0.64, 0.9, 1.42, 1.81], "end": 2.152, "off": -0.25, "cost": 0.976}, "M3": {"onsets": [0.0, 0.408, 0.645, 0.872, 1.328, 1.908], "end": 2.488, "off": -0.25, "cost": 0.957}, "M4": {"onsets": [0.0, 0.36, 0.8, 1.008, 1.384, 1.768, 2.064], "end": 2.544, "off": 0.0, "cost": 0.918}, "M5": {"onsets": [0.0, 0.488, 0.808, 1.16, 1.424, 2.008], "end": 2.592, "off": 0.0, "cost": 0.767}, "M6": {"onsets": [0.0, 0.48, 0.72, 1.008, 1.376, 1.896], "end": 2.448, "off": -0.25, "cost": 1.106}, "M7": {"onsets": [0.0, 0.44, 0.728, 1.088, 1.384, 1.996], "end": 2.632, "off": -0.5, "cost": 0.835}, "V1": {"onsets": [0.0, 0.56, 1.072, 1.608, 2.104, 2.928], "end": 3.96, "off": 2.46, "cost": 0.74}, "V2": {"onsets": [0.0, 0.544, 1.192, 1.664, 2.168, 3.128], "end": 4.008, "off": 2.11, "cost": 0.632}, "V3": {"onsets": [0.0, 0.592, 1.184, 1.736, 2.304, 2.928, 3.512], "end": 4.32, "off": 2.1, "cost": 0.758}, "V4": {"onsets": [0.0, 0.64, 1.36, 1.608, 2.312, 3.272], "end": 4.232, "off": 1.76, "cost": 0.912}, "V5": {"onsets": [0.0, 0.768, 1.184, 1.728, 2.152, 3.228], "end": 4.304, "off": 2.57, "cost": 0.693}, "V6": {"onsets": [0.0, 0.648, 1.12, 1.664, 2.296, 3.212], "end": 4.128, "off": 1.83, "cost": 0.701}, "V7": {"onsets": [0.0, 0.696, 1.032, 1.648, 2.264, 3.148], "end": 4.032, "off": 1.75, "cost": 0.659}, "W1": {"onsets": [0.3, 1.44, 2.03, 2.51, 3.02, 3.55, 4.24, 5.22, 5.81, 6.3], "end": 7.54, "off": 0.25, "cost": 0.544}};
+const ALIGN = __ALIGN__;
 
 
 const SIX = ["南","無","阿","彌","陀","佛"];
@@ -928,6 +928,65 @@ keyEl.onchange=()=>setNow(0,0);
 setMode("solfa");
 setPart(0);
 </script>
+'''
 
-</body>
-</html>
+# 各套音檔的原始路徑 (供網站版複製成獨立檔案)
+SRC = {
+  "S": [os.path.expanduser(f"~/Desktop/phrases/p{i}.mp3") for i in range(7)],
+  "L": [os.path.expanduser(f"~/Desktop/lyrics_seg/{c}.mp3") for c in "ABCDEFG"],
+  "Q": [os.path.expanduser(f"~/Desktop/p2/q{i}.mp3") for i in range(8)],
+  "R": [os.path.expanduser(f"~/Desktop/runA/a{i}.mp3") for i in range(1,8)],
+  "M": [os.path.expanduser(f"~/Desktop/lyr2/m{i}.mp3") for i in range(2,8)],
+  "V": [f"{_vid}/v{i}.mp3" for i in range(1,8)],
+  "W": [f"{_vid}/w1.mp3"],
+}
+B64 = {"S":clips_s,"L":clips_l,"Q":clips_q,"R":clips_r,"M":clips_m,"V":clips_v,"W":clips_w}
+ORDER = ["S","L","Q","R","M","V","W"]
+
+def build(mode):
+    h = HTML.replace("__CLIP_MODE__", mode).replace("__ALIGN__", json.dumps(ALIGN, ensure_ascii=False))
+    for k in ORDER:
+        val = B64[k] if mode=="inline" else [f"audio/{k}{i}.mp3" for i in range(len(SRC[k]))]
+        h = h.replace(f"__CLIPS_{k}__", json.dumps(val))
+    return h
+
+# 1) Artifact 版: 內嵌
+art = os.path.expanduser("~/Documents/Claude/mituo_jianpu.html")
+with open(art,"w") as f: f.write(build("inline"))
+print("Artifact 版:", art, "%.1f KB" % (os.path.getsize(art)/1024))
+
+# 2) 網站版: 完整 HTML 文件 + 獨立音檔
+import shutil
+site = os.path.expanduser("~/Documents/Claude/mituo-site")
+os.makedirs(f"{site}/audio", exist_ok=True)
+body = build("files")
+head, rest = body.split("</style>", 1)
+DOC = ("""<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EDEAE0">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111828">
+<meta name="description" content="彌陀聖號簡譜逐句教唱：唱名與加字原音、琴音同步伴奏、跟唱留空與木魚拍子。">
+<link rel="icon" type="image/png" sizes="48x48" href="icon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="彌陀簡譜">
+<meta name="application-name" content="彌陀簡譜">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+""" + head + "</style>\n</head>\n<body>" + rest + "\n</body>\n</html>\n")
+with open(f"{site}/index.html","w") as f: f.write(DOC)
+open(f"{site}/.nojekyll","w").close()
+n=0
+for k in ORDER:
+    for i,src in enumerate(SRC[k]):
+        shutil.copy(src, f"{site}/audio/{k}{i}.mp3"); n+=1
+print("網站版:", site, "index.html %.1f KB" % (os.path.getsize(f"{site}/index.html")/1024), f"+ {n} 個音檔")

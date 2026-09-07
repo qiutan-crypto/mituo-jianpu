@@ -1,0 +1,16 @@
+{
+  "name": "彌陀聖號簡譜教唱",
+  "short_name": "彌陀簡譜",
+  "description": "譯經院講經兩段念佛簡譜的逐句教唱練習：老師原音、琴音同步伴奏、循環跟唱。",
+  "lang": "zh-Hant",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111828",
+  "theme_color": "#111828",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
